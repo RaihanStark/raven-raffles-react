@@ -1,0 +1,16 @@
+.account-page {
+  background: url("./../../assets/img/login_bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.logo {
+  width: 250px;
+}
+
+@media (min-width: 576px) {
+  .logo {
+    width: 350px;
+  }
+}
