@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="/static/assets/img/apple-icon.png">
+  <link rel="icon" href="/static/assets/img/favicon.ico">
+  <title>
+    Raven Raffles - {% block title %}{% endblock %}
+  </title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <!-- Nucleo Icons -->
+  <link href="/static/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@3/dark.css" rel="stylesheet">
+  <link href="/static/assets/css/black-dashboard.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/assets/css/app.css">
+  <link rel="stylesheet" href="/static/assets/css/rSlider.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+  <!-- Specific Page CSS goes HERE  -->
+  <script src="https://js.pusher.com/5.0/pusher.min.js"></script>
+  <style>
+    textarea #server-log {
+      color: white;
+      height: 33em;
+      max-height: none;
+    }
+  </style>
+  {% block stylesheets %}{% endblock stylesheets %}
+
+</head>
+
+<body class="">
+  <div class="wrapper">
+
+    {% include 'site_template/sidebar.html' %}
+
+    <div class="main-panel">
+
+      {% include 'site_template/navigation.html' %}
+
+      <div class="content">
+
+        {% block content %}{% endblock content %}
+
+      </div>
+
+      {% include 'site_template/footer.html' %}
+
+    </div>
+
+  </div>
+
+  {% include 'site_template/scripts.html' %}
+
+  {% include 'site_template/scripts-sidebar.html' %}
+
+  <!-- Specific Page JS goes HERE  -->
+  {% block javascripts %}{% endblock javascripts %}
+
+</body>
+
+</html>

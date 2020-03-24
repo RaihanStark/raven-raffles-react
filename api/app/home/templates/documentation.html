@@ -1,0 +1,95 @@
+{% extends "base-site.html" %}
+
+{% block title %} Documentation {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+    img {
+        height: auto;
+        width: auto;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-profile">
+            <div class="card-body">
+                <h1 id="raven-raffles-documentation">Raven Raffles Documentation</h1>
+                <h2 id="-how-to-set-up-an-account">- How to set up an account</h2>
+                <center><img src="https://i.imgur.com/tTnRvcO.png" alt=""></center>
+                <p>You will get a warning if you have not set up your account. You must set up your account through the
+                    profiles and settings page. Follow the steps below to set up your account
+                </p>
+                <h3>Setup Settings</h3>
+                <center><img src="https://i.imgur.com/u3pYA1C.png" alt=""></center>
+                <ol>
+                    <li>Click Settings on the sidebar.</li>
+                    <li>Fill the Anti Captcha API (field must be filled in if you want the full features of raven
+                        raffles)</li>
+                    <li>Fill the Discord WebHooks URL( <a
+                            href="https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks">https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks</a>
+                        )</li>
+                    <li>Fill the Delay (in seconds)
+                        The longer the delay the less likely your proxies will be banned by them.</li>
+                    <li>Fill the Proxies ( One Proxies Per Line )</li>
+                    <li>Click Saved!
+                    </li>
+                    <h3>Profiles Setup</h3>
+                    <center><img src="https://i.imgur.com/HukvzGP.png" alt=""></center>
+
+                </ol>
+                <p>To access Profiles Pages, simply click Profiles on the sidebar and fill the information.</p>
+                <p>There&#39;s two option to fill your profiles settings:</p>
+                <ul>
+                    <li>
+                        <p>Fill manually on the app</p>
+                    </li>
+                    <li>
+                        <p>Import from CSV file</p>
+                    </li>
+                </ul>
+                <p>And you&#39;re done!</p>
+                <h2 id="how-to-run-the-bot">- How to run the bot</h2>
+                <p>The bot system here is like a cart at an online store, so you add a product to the cart (we call it
+                    task) and if you run the cart, the bot will automatically run all the tasks in the cart from top to
+                    bottom one by one.</p>
+                <ol>
+
+                    <center><img src="https://i.imgur.com/Z0PAfMe.png" alt=""></center>
+                    <li>Pick the Raffles Products on Raffles Page by clicking View on your selected products</li>
+                    <center><img src="https://i.imgur.com/fKfI08H.png" alt=""></center>
+                    <li>Pick your size on Available Size fields (You can only pick one size per task)</li>
+                    <li>Input Entries Number ( it&#39;s like how much you want to submit your raffle )
+                        for example, if you enter 3 then the bot will send 3 entries raffles</li>
+                    <li>Click add to task</li>
+                </ol>
+                <p>You can repeat the number one instructions if you want to add more raffles. If you are done with
+                    that, you can follow further instructions below.</p>
+
+                <ul>
+                    <li>Click Tasks on the sidebar</li>
+                </ul>
+                <p>There you can see what raffles the bot will send, you can delete them by clicking the trash button on
+                    the right side of the item.</p>
+                <center><img src="https://i.imgur.com/y5fTTXh.png" alt=""></center>
+                <ul>
+                    <li>Click Start Task</li>
+                </ul>
+
+                <p>and you successfully run the bot, it is recommended not to close your browser tab when running the
+                    bot.</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

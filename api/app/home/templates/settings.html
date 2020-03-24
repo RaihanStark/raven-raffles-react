@@ -1,0 +1,144 @@
+{% extends "base-site.html" %}
+
+{% block title %} Settings {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="title">Settings</h5>
+        </div>
+
+        <form action="/v1/config" method="post" name="getconfig">
+          <div class="card-body">
+
+            {% if msg %}
+            <div class="alert alert-success">
+              <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+              </button>
+              <span><b> Success - </b> Settings has been Saved</span>
+            </div>
+            {% endif %}
+
+            <div class="row">
+              <div class="col-md-5 pr-md-1">
+                <div class="form-group">
+                  <label>License Key (disabled)</label>
+                  <input type="text" class="form-control" disabled="" value="{{ current_user.licensekey}}">
+                </div>
+              </div>
+              <div class="col-md-3 px-md-1">
+                <div class="form-group">
+                  <label>Username</label>
+                  <input type="text" name='username' class="form-control" disabled=""
+                    value="{{ current_user.username }}">
+                </div>
+              </div>
+              <div class="col-md-4 pl-md-1">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Email address</label>
+                  <input type="email" class="form-control" disabled="" value="{{ current_user.email }}">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 pr-md-1">
+                <div class="form-group">
+                  <label>Anti Captcha</label>
+                  <input type="text" class="form-control" name='anticaptcha' placeholder="API Key" value="">
+                </div>
+              </div>
+              <div class="col-md-4 px-md-1">
+                <div class="form-group">
+                  <label>Discord</label>
+                  <input type="text" class="form-control" name='webhooks' placeholder="Webhooks URL" value="">
+                </div>
+              </div>
+              <div class="col-md-4 pl-md-1">
+                <div class="form-group">
+                  <label>Delay</label>
+                  <input type="number" class="form-control" name='delay' placeholder="Delay in Seconds" value="">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Proxies</label>
+                  <textarea rows="4" cols="80" class="form-control" name='proxies' placeholder="165.22.48.4:8080"
+                    value=""></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-fill btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- Display Settings -->
+<script>
+  $(document).ready(function () {
+    // Get Basic Settings
+    $.ajax({
+      type: "get",
+      url: "/v1/config",
+      dataType: "json",
+      success: function (response) {
+        for (let item in response['data']) {
+          $('input[name=' + item + ']').val(response['data'][item]);
+          if (item == 'proxies') {
+            $('textarea[name=' + item + ']').val(response['data'][item]);
+          }
+        }
+      }
+    });
+
+    // Post Settings
+    $('form').submit(function (e) {
+      e.preventDefault()
+      if (e['target']['name'] == 'getconfig') {
+        let formdata = {
+          "username": $('input[name=username]').val(),
+          "anticaptcha": $('input[name=anticaptcha]').val(),
+          "webhooks": $('input[name=webhooks]').val(),
+          "delay": $('input[name=delay]').val(),
+          "proxies": $('textarea[name=proxies]').val()
+        };
+        $.ajax({
+          type: "post",
+          url: "/v1/config",
+          data: formdata,
+          dataType: 'json',
+          success: function (response) {
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Settings Saved!',
+              showConfirmButton: false,
+              timer: 1500
+            })
+          }
+        });
+      }
+    })
+  });
+</script>
+{% endblock javascripts %}

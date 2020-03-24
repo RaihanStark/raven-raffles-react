@@ -1,0 +1,70 @@
+{% extends "base-site.html" %}
+
+{% block title %} Task Manager {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="container">
+            <div class="card card-profile">
+                <div class="card-body">
+                    <h6 class="card-category text-gray">Task Manager</h6>
+                    <div class="table-full-width table-responsive">
+                        <table class="table" id="taskmanager">
+                            <tbody>
+                                {% for task in tasks['tasks'] %}
+                                <tr>
+                                    <td>
+                                        <p>{{task['id']}}</p>
+                                    </td>
+                                    <td>
+                                        <p class="title text-primary">{{task['name']}}
+                                        </p>
+                                        <span class="badge badge-pill badge-secondary">{{task['sites']}}</span>
+                                        <span class="badge badge-pill badge-secondary">{{task['size']}}</span>
+                                        <span class="badge badge-pill badge-primary">Entries: {{task['entries']}}</span>
+                                        <span class="badge badge-pill badge-primary">Profiles ID:
+                                            {{task['profileid']}}</span>
+                                    </td>
+                                    <td class="td-actions text-right">
+                                        <span class="badge badge-pill badge-primary"
+                                            id="statustasks-{{task['id']}}"></span>
+                                        <button type="button" rel="tooltip" data-id="{{ task['id'] }}"
+                                            class="btn btn-link delete-task" data-original-title="Delete Task">
+                                            <i class="tim-icons icon-trash-simple"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if tasks['tasks'] %}
+                    <div class="d-flex justify-content-center mt-4">
+                        <a href='#' class="btn btn-primary btn-round" id="start-tasks">Start
+                            Task</a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="d-flex justify-content-center mt-4 ">
+                    <a href='#' class="btn btn-primary btn-round disabled" id="start-tasks">Start
+                        Task</a>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="/static/assets/js/app/tasks-views.js"></script>
+{% endblock javascripts %}

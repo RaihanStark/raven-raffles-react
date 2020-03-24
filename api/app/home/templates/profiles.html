@@ -1,0 +1,202 @@
+{% extends "base-site.html" %}
+
+{% block title %} Profiles {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="title">Profiles</h5>
+        </div>
+        <div class="card-body">
+          <table id="profiles-list" class="table table-striped" style="width:100%">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Profile Name</th>
+                <th>Card Number</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="title">Import from CSV</h5>
+        </div>
+
+        <form class='profilepage' id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">
+          <div class="card-body">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="customFile" name="file">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+
+            </div>
+            <label><br><a href="https://drive.google.com/file/d/16XyiKHo6r9WD1xIRDq0ZJn4IEXhfVDzZ/view?usp=sharing"
+                target="_blank">Download
+                Sample</a></label>
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-fill btn-primary">Export</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="title">Add New Profiles</h5>
+        </div>
+
+        <form class='profilepage' action="/v1/profiles" method="post" name="getprofile">
+          <div class="card-body">
+
+            {% if msg %}
+            <div class="alert alert-success">
+              <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+              </button>
+              <span><b> Success - </b> Settings has been Saved</span>
+            </div>
+            {% endif %}
+            <div class="row">
+              <div class="col-md-12 pr-md-1">
+                <div class="form-group">
+                  <label>Profiles Name</label>
+                  <input type="text" class="form-control" name="profilename" placeholder="Primary Profile">
+                </div>
+              </div>
+            </div>
+
+            <h5 class="title">Person Information</h5>
+            <div class="row">
+              <div class="col-md-3 pr-md-1">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" class="form-control" name="firstname" placeholder="First Name">
+                </div>
+              </div>
+              <div class="col-md-3 px-md-1">
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text" class="form-control" name="lastname" placeholder="Last Name">
+                </div>
+              </div>
+              <div class="col-md-6 pl-md-1">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Email address</label>
+                  <input type="text" class="form-control" name="email" placeholder="random">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 pr-md-1">
+                <div class="form-group">
+                  <label>Phone Number</label>
+                  <input type="text" class="form-control" name='phonenumber' placeholder="81818234283">
+                </div>
+              </div>
+            </div>
+
+            <h5 class="title">Address Information</h5>
+            <div class="row">
+              <div class="col-md-8 pr-md-1">
+                <div class="form-group">
+                  <label>Address</label>
+                  <input type="text" class="form-control" name='address' placeholder="1434  Hoffman Avenue">
+                </div>
+              </div>
+              <div class="col-md-2 pr-md-1">
+                <div class="form-group">
+                  <label>House Number</label>
+                  <input type="text" class="form-control" name='housenumber' placeholder="1">
+                </div>
+              </div>
+              <div class="col-md-2 pr-md-1">
+                <div class="form-group">
+                  <label>Apt Suite</label>
+                  <input type="text" class="form-control" name='aptsuite' placeholder="1">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 pr-md-1">
+                <div class="form-group">
+                  <label>City</label>
+                  <input type="text" class="form-control" name='city' placeholder="SAN ARDO">
+                </div>
+              </div>
+              <div class="col-md-2 pr-md-1">
+                <div class="form-group">
+                  <label>State / Province</label>
+                  <input type="text" class="form-control" name='stateprovince' placeholder="CA">
+                </div>
+              </div>
+              <div class="col-md-4 pr-md-1">
+                <div class="form-group">
+                  <label>Country</label>
+                  <input type="text" class="form-control" name='country' placeholder="United States">
+                </div>
+              </div>
+              <div class="col-md-2 pr-md-1">
+                <div class="form-group">
+                  <label>Zip Code</label>
+                  <input type="text" class="form-control" name='zipcode' placeholder="93450">
+                </div>
+              </div>
+            </div>
+            <h5 class="title">Payment Information</h5>
+            <div class="row">
+              <div class="col-md-6 pr-md-1">
+                <div class="form-group">
+                  <label>Card Number</label>
+                  <input type="text" class="form-control" name='cardno' placeholder="4180870310083084">
+                </div>
+              </div>
+              <div class="col-md-2 pr-md-1">
+                <div class="form-group">
+                  <label>Expiry Month</label>
+                  <input type="text" class="form-control" name='expmonth' placeholder="3">
+                </div>
+              </div>
+              <div class="col-md-2 pr-md-1">
+                <div class="form-group">
+                  <label>Expiry Year</label>
+                  <input type="text" class="form-control" name='expyear' placeholder="2024">
+                </div>
+              </div>
+              <div class="col-md-2 pr-md-1">
+                <div class="form-group">
+                  <label>CVV</label>
+                  <input type="text" class="form-control" name='cvv' placeholder="122">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-fill btn-primary">Quick Add</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% endblock javascripts %}

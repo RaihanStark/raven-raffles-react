@@ -1,0 +1,75 @@
+<div class="sidebar">
+  <div class="sidebar-wrapper">
+    <div class="logo">
+      <a href="" class="simple-text logo-mini">
+        RR
+      </a>
+      <a href="" class="simple-text logo-normal">
+        Raven Raffles
+      </a>
+    </div>
+
+
+    <ul class="nav">
+      {% if current_user.is_authenticated %}
+      <li class="active ">
+        <a href="/">
+          <i class="tim-icons icon-chart-pie-36"></i>
+          <p>Dashboard</p>
+        </a>
+      </li>
+      <li>
+        <a href="/tasks">
+          <i class="tim-icons icon-basket-simple"></i>
+          <p>Tasks</p>
+        </a>
+      </li>
+      <li>
+        <a href="/raffles">
+          <i class="tim-icons icon-delivery-fast"></i>
+          <p>Raffles</p>
+        </a>
+      </li>
+      <li>
+        <a href="/profiles">
+          <i class="tim-icons icon-single-02"></i>
+          <p>Profiles</p>
+        </a>
+      </li>
+      <li>
+        <a href="/settings">
+          <i class="tim-icons icon-settings"></i>
+          <p>Settings</p>
+        </a>
+      </li>
+      <li>
+        <a href="/documentation">
+          <i class="tim-icons icon-book-bookmark"></i>
+          <p>Documentation</p>
+        </a>
+      </li>
+      <li>
+        <a href="/logout">
+          <i class="tim-icons icon-button-power"></i>
+          <p>Logout</p>
+        </a>
+      </li>
+      {% else %}
+      <li>
+        <a href="/login">
+          <i class="tim-icons icon-lock-circle"></i>
+          <p>Login</p>
+        </a>
+      </li>
+      <li>
+        <a href="/create_user">
+          <i class="tim-icons icon-key-25"></i>
+          <p>Register</p>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+
+
+  </div>
+</div>

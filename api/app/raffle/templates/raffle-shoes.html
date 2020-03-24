@@ -1,0 +1,227 @@
+{% extends "base-site.html" %}
+
+{% block title %} {{raffle['name']}} {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-profile">
+            <div class="card-body">
+                <div class="container">
+                    <div class="row mt-3 mb-3">
+                        <div class="col-lg-6 d-flex justify-content-center">
+                            <img src="{{raffle['img']}}" alt="" srcset="">
+                        </div>
+                        <div class="col-lg-6">
+                            <form action="/v1/tasks" method="post">
+                                <input type="hidden" name="shoeid" value="{{ raffle['id'] }}">
+                                <input type="hidden" name="shoeurl" value="{{ raffle['link'] }}">
+                                <input type="hidden" name="shoename" value="{{ raffle['name'] }}">
+                                <input type="hidden" name="sites" value="{{ raffle['sites'] }}">
+                                <span
+                                    class="badge badge-pill badge-primary mt-4 mb-2 mt-lg-0 mb-lg-2">{{raffle['sites']}}</span>
+                                <h3 class="text-primary font-weight-bold">{{raffle['name']}}</h3>
+                                <p>Raffle Closed on <span
+                                        class="font-weight-bold text-danger ">{{raffle['date']}}</span> </p>
+                                <p>Retail Price is <span class="font-weight-bold text-danger">{{raffle['price']}}</span>
+                                </p>
+                                <!-- Default dropright button -->
+                                <div class="form-group">
+
+                                    <p>Select Size Method : </p>
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button type="button" class="btn btn-secondary" id='pickSize'>Pick Size</button>
+                                        <button type="button" class="btn btn-secondary" id='pickRange'>Pick Size
+                                            Range</button>
+                                    </div>
+                                    <div id='pickSizeElement'>
+                                        <p>Available Size : </p>
+                                        <select class="form-control mt-lg-2" name='shoesize'>
+                                            <option value="random">Random</option>
+                                            {% for size in raffle['sizes'] %}
+                                            <option value="US {{size}}">US {{size}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div id='pickRangeElement'>
+                                        <p>Size Range (US) : </p>
+                                        <input type="text" id="sizeSlider" />
+                                    </div>
+                                    <p for="profileSelect" class="mt-2">Select Profiles: </p>
+                                    <select class="form-control" id="profileSelect">
+                                        <option>Select Profiles</option>
+                                        <option value='all'>All Profiles</option>
+                                    </select>
+                                    <p class="mt-2">Entries : </p>
+                                    <input type="number" class="form-control mt-lg-2" name='shoeentries' min=0 max=10
+                                        value="1">
+                                </div>
+                                <button type="submit"
+                                    class="btn btn-primary btn-round d-flex justify-content-center mt-lg-3">Add to
+                                    task</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <a href="/raffles"><button type="button" class="btn btn-secondary btn-round btn-sm">Back to
+                            Raffles</button></a>
+                    <a href="/tasks"><button type="button" class="btn btn-secondary btn-round btn-sm">Task
+                            Manager</button></a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        onOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    // magic.js
+    $(document).ready(function () {
+
+        var showPickSize = false;
+        var showPickRange = true;
+
+        $('#pickSizeElement').hide();
+
+        $('#pickSize').on('click', function () {
+            if (showPickSize) {
+                $('#pickSizeElement').hide();
+                showPickSize = false;
+            } else {
+                if (showPickRange) {
+                    $('#pickRangeElement').hide();
+                    showPickRange = false;
+                }
+                $('#pickSizeElement').show();
+                showPickSize = true;
+            }
+        });
+
+        $('#pickRange').on('click', function () {
+            if (showPickRange) {
+                $('#pickRangeElement').hide();
+                showPickRange = false;
+            } else {
+                if (showPickSize) {
+                    $('#pickSizeElement').hide();
+                    showPickSize = false;
+                }
+                $('#pickRangeElement').show();
+                showPickRange = true;
+            }
+        });
+
+        // Get Dropdown
+        $.ajax({
+            type: "GET",
+            url: "/v1/profiles",
+            dataType: "json",
+            success: function (response) {
+                $("#profileSelect").empty();
+                $("#profileSelect").append("<option value='add'>--All Profiles--</option>");
+                for (const data in response['data']) {
+                    if (response['data'].hasOwnProperty(data)) {
+                        const element = response['data'][data];
+                        $("#profileSelect").append("<option value='" + element.id +
+                            "'>" + element.profilename + "</option>");
+                    }
+                }
+            }
+        });
+
+        let sizelist = [];
+        $('select[name=shoesize] option').each(function () {
+            if ($(this).val() != 'random') {
+                sizelist.push($(this).val().replace('US ', ''));
+            }
+
+        });
+        var mySlider = new rSlider({
+            target: '#sizeSlider',
+            values: sizelist,
+            range: true,
+        });
+
+        // process the form
+        $('form').submit(function (event) {
+            event.preventDefault();
+            let sizeRange = 'US ' + mySlider.getValue().replace(',', ':')
+            // get the form data
+            // there are many ways to get this data using jQuery (you can use the class or id also)
+            if ($("#profileSelect").val() == 0) {
+                Toast.fire({
+                    icon: 'info',
+                    title: "Please Select Profiles"
+                });
+                return
+            }
+
+            var formData = {
+                'sites': $('input[name=sites]').val(),
+                'shoeid': $('input[name=shoeid]').val(),
+                'shoeurl': $('input[name=shoeurl]').val(),
+                'shoename': $('input[name=shoename]').val(),
+                'shoesize': showPickSize ? $('select[name=shoesize]').val() : sizeRange,
+                'shoeentries': $('input[name=shoeentries]').val(),
+                'profileid': $("#profileSelect").val()
+            };
+
+            // process the form
+            $.ajax({
+                    type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+                    url: '/v1/tasks', // the url where we want to POST
+                    data: formData, // our data object
+                    dataType: 'json', // what type of data do we expect back from the server
+                    encode: true,
+                    statusCode: {
+                        400: function (e) {
+                            console.log(e.responseJSON['msg'])
+                            Toast.fire({
+                                icon: 'error',
+                                title: e.responseJSON['msg']
+                            })
+                        }
+                    }
+                })
+                // using the done promise callback
+                .done(function (data) {
+                    // log data to the console so we can see
+                    console.log(data);
+                    Toast.fire({
+                        icon: 'success',
+                        title: data['msg']
+                    })
+                    // here we will handle errors and validation messages
+                });
+
+            // stop the form from submitting the normal way and refreshing the page
+
+        });
+    });
+</script>
+{% endblock javascripts %}

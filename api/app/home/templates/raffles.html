@@ -1,0 +1,112 @@
+{% extends "base-site.html" %}
+
+{% block title %} Raffles {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="title">Raffles</h5>
+        <p class="category">{{totalshoes}} Raffles Available</p>
+      </div>
+      <div class="card-body all-icons">
+
+        <!-- {% for shoe in shoes %}
+          <div class="font-icon-list col-lg-4 col-sm-4 col-xs-6 col-xs-6">
+            <div class="font-icon-detail">
+              <img src="{{shoe['image']}}" alt="" srcset="">
+              <span class="badge badge-pill badge-primary mt-3 mb-n5">{{shoe['sites']}}</span>
+              <p class="mt-2">{{shoe['name']}}</p>
+              <a href="/raffles/{{shoe['id']}}"><button type="button" class="btn btn-primary mt-3">View</button></a>
+            </div>
+          </div>
+          {% endfor %} -->
+
+
+
+
+        <table class="table table-striped" id="raffles_shoes">
+          <thead>
+            <tr>
+              <th scope="col">Image</th>
+              <td scope="col"> Site</td>
+              <th scope="col">Title</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for shoe in shoes %}
+            <tr>
+              <td><img src="{{shoe['image']}}" class="mr-3 zoom center-cropped align-self-center" alt="..."></td>
+              <td><span class="badge badge-pill badge-primary mt-3 mb-n5">{{shoe['sites']}}</span></td>
+              <td>{{shoe['name']}}</td>
+              <td>
+                <a href="/raffles/{{shoe['id']}}"><button type="button"
+                    class="btn btn-primary btn-sm align-self-center">View</button></a>
+              </td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function () {
+
+    $('#raffles_shoes').DataTable({
+      responsive: true,
+      "autoWidth": true
+    });
+
+    $('#refresh-raffle').on('click', function () {
+      $.ajax({
+        type: "get",
+        url: "/raffles/refresh",
+        dataType: "json",
+        beforeSend: function (e) {
+          $('#refresh-raffle').attr('disabled', true);
+          $('#refresh-raffle').text('Loading ...');
+        },
+        success: function (e) {
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Raffles Refreshed',
+            showConfirmButton: false,
+            timer: 1000
+          })
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+        },
+        statusCode: {
+          500: function () {
+            Swal.fire({
+              position: 'center',
+              icon: 'error',
+              title: 'Internal Error! Please Contact Developer.',
+              showConfirmButton: true,
+              timer: 5000
+            })
+          }
+        }
+      });
+    })
+  })
+</script>
+{% endblock javascripts %}

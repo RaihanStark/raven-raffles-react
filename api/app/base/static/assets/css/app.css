@@ -1,0 +1,29 @@
+/* img {
+    height: 374px;
+    width: 500px;
+    object-fit: cover;
+} */
+
+select option {
+  background-color: #525f7f;
+  color: white;
+}
+
+#taskmanager tr {
+  border: 1px solid #e14eca;
+  border-radius: 10px;
+}
+
+.media {
+  border: 1px solid #e14eca;
+}
+
+.center-cropped {
+  height: 64px;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.zoom:hover {
+  transform: scale(1.5);
+}

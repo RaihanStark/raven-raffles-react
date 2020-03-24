@@ -1,0 +1,128 @@
+{% extends "base-site.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+{% if notsetup %}
+<div class="alert alert-warning" role="alert">
+  To use this app, you must first set the information on the settings menu! or <a href="/settings"> Click Here</a>
+</div>
+{% endif %}
+
+<div class="row">
+  <div class="col-lg-6 col-md-12">
+    <div class="card ">
+      <div class="card-header">
+        <h4 class="card-title"> Stats</h4>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table tablesorter " id="">
+            <tbody>
+              <tr>
+                <td>
+                  Server Status
+                </td>
+                <td>
+                  <span class="text-primary">Online</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Bot Status
+                </td>
+                <td>
+                  Idle
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Account Information
+                </td>
+                <td>
+                  {% if notsetup %}
+                  <span class="text-danger">Please setup your information on settings menu</span>
+                  {% else %}
+                  OK
+                  {% endif %}
+
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Anti Captcha API Status
+                </td>
+                <td>
+                  {% if api['errorId'] %}
+                  <span class="text-danger">{{ api['errorDescription'] }}</span>
+                  {% else %}
+                  <span class="text-success">${{ api['balance'] }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">
+          Server Logs
+        </h4>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped" id="error-logs">
+          <thead>
+            <tr>
+              <th scope="col">Type</th>
+              <th scope="col">Message</th>
+              <th scope="col">Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for log in logs['data']['logs'] %}
+            <tr>
+              <td><span class="badge badge-danger">{{ log['type']}}</span></td>
+              <td>{{ log['message']}}</td>
+              <td>{{ log['time']}}</td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+        <button class="btn btn-danger btn-sm" id="clear-logs" role="button">Clear Logs</button>
+      </div>
+    </div>
+
+  </div>
+  {% endblock content %}
+
+  <!-- Specific Page JS goes HERE  -->
+  {% block javascripts %}
+
+  <script>
+    $(document).ready(function () {
+      $('#error-logs').DataTable({
+        "pageLength": 7
+      });
+
+      $('button#clear-logs').on('click', function () {
+        $.ajax({
+          type: "get",
+          url: "/v1/clear_logs",
+          success: function (response) {
+            location.reload();
+          }
+        });
+      })
+    });
+  </script>
+
+  {% endblock javascripts %}
