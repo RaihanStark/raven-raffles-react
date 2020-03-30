@@ -41,44 +41,29 @@ def route_errors(error):
 
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
-    login_form = LoginForm(request.form)
-    if 'login' in request.form:
+    # read form data
+    username = request.json['username']
+    password = request.json['password']
+    
+    # Locate user
+    user = User.query.filter_by(username=username).first()
+    if user == None:
+        return jsonify({'status':'error','msg':'user not found'}),400
 
-        # read form data
-        username = request.form['username']
-        password = request.form['password']
-
-        # Locate user
-        user = User.query.filter_by(username=username).first()
-
-        # Check the password
-        if user and verify_pass(password, user.password):
-
-            # # Check License
-            # validation = requests.post('https://xserver.boxmarshall.com/api/v2/authorize/validate/no-device',
-            #                            json={"serialkey": current_user.licensekey})
-            # if validation.status_code == 200:
-            #     login_user(user)
-            #     session.permanent = True
-            #     return redirect(url_for('base_blueprint.route_default'))
-            # else:
-            #     return render_template('login/login.html', msg='License invalid or expired', form=login_form)
-            login_user(user)
-            session.permanent = True
-            return redirect(url_for('base_blueprint.route_default'))
-        # Something (user or pass) is not ok
-        return render_template('login/login.html', msg='Wrong user or password', form=login_form)
-
-    if not current_user.is_authenticated:
-        return render_template('login/login.html',
-                               form=login_form)
-    return redirect(url_for('home_blueprint.index'))
+    # Check the password
+    if user and verify_pass(password, user.password):
+        return jsonify({'status':'success'}),200
+    # Something (user or pass) is not ok
+    return jsonify({'status':'error','msg':'password incorrect'}),400
+        
+        
 
 
 @blueprint.route('/create_user', methods=['GET', 'POST'])
 def create_user():
     username = request.json['username']
     email = request.json['email']
+    password = request.json['password']
     licensekey = request.json['licensekey']
 
     # Check License
@@ -86,9 +71,7 @@ def create_user():
                                 json={"serialkey": licensekey})
 
     if validation.status_code == 200:
-
         user = User.query.filter_by(username=username).first()
-        print(user)
         if user:
             return jsonify({'status':'invalid username','msg':'Username is already taken'}),400
 
@@ -104,7 +87,7 @@ def create_user():
         db.session.add(user)
         db.session.commit()
 
-        return jsonify({'status':'success','token':encrypt_jwt(user.username).decode('utf8')})
+        return jsonify({'status':'success','token':encrypt_jwt(user.username).decode('utf8')}),201
 
     else:
         return jsonify({'status':'invalid key','msg':'Key doesn\'t exists or expired'}),400

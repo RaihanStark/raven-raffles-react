@@ -184,6 +184,9 @@ def encrypt_jwt(username):
 
 def decrypt_jwt(token):
     try:
-        return jwt.decode(token, Config.SECRET_KEY, leeway=10, algorithms=['HS256'])
+        decode = jwt.decode(token, Config.SECRET_KEY, leeway=10, algorithms=['HS256'])
+        return decode
     except:
-        return {'msg':'Token Expired'}
+        # Return false if expired
+        return False
+
