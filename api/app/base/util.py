@@ -20,8 +20,9 @@ import csv
 import json
 import requests
 from app import db
-from datetime import datetime
-
+from datetime import datetime, timedelta
+import jwt
+from config import Config
 
 def hash_pass(password):
     """Hash a password for storing."""
@@ -177,3 +178,12 @@ def get_balance_anticaptcha(apikey):
     r = requests.get('https://api.anti-captcha.com/getBalance', json={'clientKey':apikey})
     
     return r.json()
+
+def encrypt_jwt(username):
+    return jwt.encode({'username':username,'exp': datetime.utcnow() + timedelta(seconds=1)},Config.SECRET_KEY)
+
+def decrypt_jwt(token):
+    try:
+        return jwt.decode(token, Config.SECRET_KEY, leeway=10, algorithms=['HS256'])
+    except:
+        return {'msg':'Token Expired'}

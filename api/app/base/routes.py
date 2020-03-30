@@ -16,11 +16,12 @@ from app.base import blueprint
 from app.base.forms import LoginForm, CreateAccountForm
 from app.base.models import User
 
-from app.base.util import send_log, clear_logs, verify_pass, read_csv, get_profiles_by_id
+from app.base.util import send_log, clear_logs, verify_pass, read_csv, get_profiles_by_id, encrypt_jwt, decrypt_jwt
 
 import requests
 import json
 import os
+
 
 
 @blueprint.route('/')
@@ -28,7 +29,7 @@ def route_default():
     # shoe = Shoes(name='Raihan')
     # db.session.add(shoe)
     # db.session.commit()
-    return redirect(url_for('base_blueprint.login'))
+    return jsonify({'msg':encrypt_jwt('lmao').decode('utf8')})
 
 
 @blueprint.route('/error-<error>')
@@ -76,43 +77,37 @@ def login():
 
 @blueprint.route('/create_user', methods=['GET', 'POST'])
 def create_user():
-    login_form = LoginForm(request.form)
-    create_account_form = CreateAccountForm(request.form)
-    if 'register' in request.form:
+    username = request.json['username']
+    email = request.json['email']
+    licensekey = request.json['licensekey']
 
-        username = request.form['username']
-        email = request.form['email']
-        licensekey = request.form['licensekey']
+    # Check License
+    validation = requests.post('https://xserver.boxmarshall.com/api/v2/authorize/validate/no-device',
+                                json={"serialkey": licensekey})
 
-        # Check License
-        validation = requests.post('https://xserver.boxmarshall.com/api/v2/authorize/validate/no-device',
-                                   json={"serialkey": licensekey})
+    if validation.status_code == 200:
 
-        if validation.status_code == 200:
+        user = User.query.filter_by(username=username).first()
+        print(user)
+        if user:
+            return jsonify({'status':'invalid username','msg':'Username is already taken'}),400
 
-            user = User.query.filter_by(username=username).first()
-            if user:
-                return render_template('login/register.html', msg='Username already registered', form=create_account_form)
+        user = User.query.filter_by(email=email).first()
+        if user:
+            return jsonify({'status':'invalid email','msg':'Email already registered'}),400
 
-            user = User.query.filter_by(email=email).first()
-            if user:
-                return render_template('login/register.html', msg='Email already registered', form=create_account_form)
+        user = User.query.filter_by(licensekey=licensekey).first()
+        if user:
+            return jsonify({'status':'invalid key','msg':'Key is already used'}),400
+        # else we can create the user
+        user = User(**request.json)
+        db.session.add(user)
+        db.session.commit()
 
-            user = User.query.filter_by(licensekey=licensekey).first()
-            if user:
-                return render_template('login/register.html', msg='License Key already registered to an account', form=create_account_form)
-            # else we can create the user
-            user = User(**request.form)
-            db.session.add(user)
-            db.session.commit()
-
-            return redirect('/')
-
-        else:
-            return render_template('login/register.html', msg='License Key is not valid', form=create_account_form)
+        return jsonify({'status':'success','token':encrypt_jwt(user.username).decode('utf8')})
 
     else:
-        return render_template('login/register.html', form=create_account_form)
+        return jsonify({'status':'invalid key','msg':'Key doesn\'t exists or expired'}),400
 
 
 @blueprint.route('/settings', methods=['GET', 'POST'])

@@ -13,7 +13,7 @@ class Config(object):
 
     basedir = os.path.abspath(os.path.dirname(__file__))
 
-    SECRET_KEY = 'kDF3WECRQ3ERTVQ$#%!$23Rey'
+    SECRET_KEY = 'B7BC5794AA2C55D97A7A65911F854'
 
     # This will create a file in <app> FOLDER
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'database.db')
