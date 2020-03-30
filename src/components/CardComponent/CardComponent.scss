@@ -1,0 +1,65 @@
+.card-gradient {
+  background-image: url("../../assets/img/bg-checkout.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  width: auto;
+
+  border-radius: 1em;
+
+  padding: 1.5em;
+
+  .card-header-app {
+    font-size: 1.3rem;
+    background-color: black;
+  }
+
+  .info {
+    h1 {
+      color: rgba($color: #fff, $alpha: 0.7);
+      margin: 0;
+    }
+
+    a {
+      display: block;
+      white-space: nowrap;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .profiles-info {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid rgba($color: #fff, $alpha: 0.2);
+    a {
+      font-size: 0.9rem;
+    }
+
+    .fa-check {
+      color: #7ed321;
+    }
+
+    .profile-label {
+      color: rgba($color: #fff, $alpha: 0.6);
+    }
+  }
+
+  h6 {
+    margin: 0;
+  }
+
+  .card-image {
+    width: 100%;
+
+    .check-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+}
+
+#account-info {
+  height: 100%;
+}
