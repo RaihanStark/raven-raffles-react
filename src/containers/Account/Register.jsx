@@ -6,6 +6,9 @@ import "./Accounts.scss";
 
 import Logo from "./../../assets/img/logo.png";
 export default class Login extends Component {
+  submitRegister = () => {
+    alert("a");
+  };
   render() {
     return (
       <div className="account-page">
@@ -14,7 +17,7 @@ export default class Login extends Component {
             <img src={Logo} class="logo" alt="logo raven raffles"></img>
           </div>
 
-          <RegisterForm></RegisterForm>
+          <RegisterForm submit={this.submitRegister}></RegisterForm>
         </Container>
       </div>
     );

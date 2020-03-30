@@ -13,7 +13,7 @@ from os import path
 from config import Config
 from .celery_utils import init_celery
 
-
+from flask_cors import CORS
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -95,6 +95,7 @@ def create_app(config, selenium=False):
     app.config.from_object(config)
     celery = make_celery(app)
     init_celery(celery, app)
+    CORS(app)
     if selenium:
         app.config['LOGIN_DISABLED'] = True
     register_extensions(app)

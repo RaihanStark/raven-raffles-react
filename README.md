@@ -26,3 +26,17 @@
 | React Server  | 8080 |
 | Python Server | 3000 |
 | Celery Server | 6379 |
+
+## How to Use
+
+### Run Flask Server
+
+flask run --host=0.0.0.0 --port=5000
+
+### Run Celery Worker
+
+celery worker -A celery_worker.celery --loglevel=info --pool=solo
+
+### Run Celery Base
+
+celery beat -A celery_worker.celery --loglevel=info

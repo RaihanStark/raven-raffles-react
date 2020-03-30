@@ -44,7 +44,7 @@ def login():
     # read form data
     username = request.json['username']
     password = request.json['password']
-    
+
     # Locate user
     user = User.query.filter_by(username=username).first()
     if user == None:
@@ -52,15 +52,17 @@ def login():
 
     # Check the password
     if user and verify_pass(password, user.password):
-        return jsonify({'status':'success'}),200
+        
+        return jsonify({'status':'success','token':encrypt_jwt(username).decode('utf8')}),200
     # Something (user or pass) is not ok
     return jsonify({'status':'error','msg':'password incorrect'}),400
         
         
 
 
-@blueprint.route('/create_user', methods=['GET', 'POST'])
+@blueprint.route('/create_user', methods=['POST'])
 def create_user():
+    print(request.data)
     username = request.json['username']
     email = request.json['email']
     password = request.json['password']
