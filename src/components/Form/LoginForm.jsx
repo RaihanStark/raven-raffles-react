@@ -7,6 +7,7 @@ import { Button, Spinner } from "react-bootstrap";
 import Swal from "sweetalert2";
 import axios from "../../client";
 
+import { Redirect } from "react-router-dom";
 export default class LoginForm extends Component {
   doLogin = e => {
     e.preventDefault();
@@ -17,11 +18,7 @@ export default class LoginForm extends Component {
         password: this.refs.password.value
       })
       .then(res => {
-        Swal.fire(
-          "Login Success",
-          "You will redirect in 3 seconds.",
-          "success"
-        );
+        window.location.href = "/dashboard";
       })
       .catch(err => {
         Swal.fire("Error", err.response.data.msg, "error");

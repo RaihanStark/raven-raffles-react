@@ -5,6 +5,8 @@ import "./App.css";
 import Login from "../Account/Login";
 import Register from "../Account/Register";
 import ForgotPassword from "../Account/ForgotPassword";
+import Dashboard from "../Dashboard/Dashboard";
+
 function App() {
   return (
     <Router>
@@ -18,6 +20,9 @@ function App() {
         <Route path="/forgot-password">
           <ForgotPassword />
         </Route>
+        <Route path="/dashboard">
+          <Dashboard />
+        </Route>
       </Switch>
       {/* <nav>
           <ul>
@@ -29,9 +34,6 @@ function App() {
             </li>
           </ul>
         </nav> */}
-
-      {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
     </Router>
   );
 }
